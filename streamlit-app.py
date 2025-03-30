@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import CharacterTextSplitter
-from langchain_chroma import Chroma
+from langchain.vectorstores import FAISS
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -35,8 +35,8 @@ try:
     # Embeddings model
     embedding = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-    # Create Chroma vector store in-memory
-    db = Chroma.from_documents(split_docs, embedding)
+    # Create Chroma/FAISS vector store in-memory
+    db = FAISS.from_documents(split_docs, embedding)
     retriever = db.as_retriever()
 
     # --- RAG Chain Setup --- #
